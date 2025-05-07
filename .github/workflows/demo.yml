@@ -1,0 +1,21 @@
+name: demo
+
+on:
+  # on demand
+  workflow_dispatch:
+
+jobs:
+  bump:
+    permissions:
+      contents: write # for peter-evans/create-pull-request to create branch
+      pull-requests: write # for peter-evans/create-pull-request to create a PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Modify README
+        run: |
+          echo test >> README.md
+      - name: Create PR
+        run: gh pr create -H demo-branch --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
